@@ -1,1 +1,3 @@
-# projects
+# Projects
+
+This repo is for projects which I felt doing for the moment...
