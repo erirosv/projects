@@ -37,6 +37,7 @@ def get_censor_data():
 
     return: the sensor values
     """
+
     temperature = round(bme280_sensor.get_temperature(), 1)
     pressure = round(bme280_sensor.get_pressure(), 1)
     humidity = round(bme280_sensor.get_humidity(), 1)
@@ -52,6 +53,7 @@ def create_socket(port):
     Use the IP-address 0.0.0.0 to be able to coonect to it without any problems.
     Port: THe port used in this project is 8080, 80 needs more privilages.
     """
+
     address = ('0.0.0.0', port)
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(address)
@@ -62,7 +64,7 @@ def serve_webpage(client_socket):
     """
     Creating a webserver/webpage to display the sensor data. 
     """
-    
+
     temperature, pressure, humidity  = get_censor_data()
     sensor_data = f'Temperature: {temperature}&deg;C, Pressure: {pressure} hPa, Humidity: {humidity}%'
 
@@ -85,11 +87,19 @@ def serve_webpage(client_socket):
         </body>
         </html>
     """
+
     response = f"HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: {len(html)}\n\n{html}"
     client_socket.send(response.encode('utf-8'))
     client_socket.close()
 
 def collect_sensor_data():
+    """
+    This method contains the loop for inserting the data to the sensor data to the database.
+    
+    The method does contain a sleep. Set the time as the user want. The default for for me 
+    is 600 seconds (10 minutes).
+    """
+
     while True:
         # Read the sensor and get date and time
         temperature, pressure, humidity  = get_censor_data()
@@ -116,6 +126,7 @@ def collect_sensor_data():
         time.sleep(10)
 
 if __name__ == '__main__':
+    # Running the webserver on a separate thread for smoother execution
     server_socket = create_socket(web_port)
     web_thread = threading.Thread(target=collect_sensor_data)
     web_thread.daemon = True
