@@ -29,6 +29,14 @@ conn = psycopg2.connect(
 )
 
 def get_censor_data():
+    """
+    Reading all the available data from the sensor. 
+    - Temerature
+    - Pressure
+    - Humidity
+
+    return: the sensor values
+    """
     temperature = round(bme280_sensor.get_temperature(), 1)
     pressure = round(bme280_sensor.get_pressure(), 1)
     humidity = round(bme280_sensor.get_humidity(), 1)
@@ -38,7 +46,12 @@ def get_censor_data():
 cursor = conn.cursor()
 
 def create_socket(port):
-    # Create a socket
+    """
+    Create a socket. 
+
+    Use the IP-address 0.0.0.0 to be able to coonect to it without any problems.
+    Port: THe port used in this project is 8080, 80 needs more privilages.
+    """
     address = ('0.0.0.0', port)
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(address)
@@ -46,10 +59,14 @@ def create_socket(port):
     return server_socket
 
 def serve_webpage(client_socket):
+    """
+    
+    """
     temperature, pressure, humidity  = get_censor_data()
     sensor_data = f'Temperature: {temperature}&deg;C, Pressure: {pressure} hPa, Humidity: {humidity}%'
 
     # structure for the simple web page
+    # change font size on the text on lthe page: font-size: 24px;
     html = f"""
         <!DOCTYPE html>
         <html>
