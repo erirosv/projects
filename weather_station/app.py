@@ -115,7 +115,8 @@ def collect_sensor_data():
         cursor.execute(insert_query, data_to_insert)
         conn.commit()
 
-        # Inform the user!
+        # Inform the user in the terminal.
+        # This is not necessary, good for testing.
         print('Adding this data to the database:')
         print(today)
         print(now)
