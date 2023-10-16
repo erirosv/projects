@@ -93,7 +93,8 @@ def collect_sensor_data():
         print(now)
         print(f'Temperature: {temperature}C, Pressure: {pressure}hPa, Humidity: {humidity}%')
 
-        # Wait for 10 minutes (600 seconds)
+        # Set time for update
+        # example: Wait for 10 minutes (600 seconds)
         time.sleep(10)
 
 if __name__ == '__main__':
