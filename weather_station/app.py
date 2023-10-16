@@ -60,8 +60,9 @@ def create_socket(port):
 
 def serve_webpage(client_socket):
     """
-    
+    Creating a webserver/webpage to display the sensor data. 
     """
+    
     temperature, pressure, humidity  = get_censor_data()
     sensor_data = f'Temperature: {temperature}&deg;C, Pressure: {pressure} hPa, Humidity: {humidity}%'
 
