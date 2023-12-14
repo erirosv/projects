@@ -5,6 +5,9 @@ The PI used for the project is a Raspberry PI 4 4GB model.
 
 ![Raspberry Pi 4](docs/pi.png)
 
+<img src="docs/pi.png" alt="Raspberry Pi 4" width="200" height="150" />
+
+
 Any rspberry pi or alternative SOC can be used. In this project, this was the SOC available. 
 
 The BME280 does com in mayn different flavors, the one used was the cheapest one on amazon. 
