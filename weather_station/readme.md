@@ -3,6 +3,14 @@
 This PI is connected with a BME280 chipset to read the temperature, humidity and pressure. 
 The PI used for the project is a Raspberry PI 4 4GB model. 
 
+![Raspberry Pi 4](docs/pi.png)
+
+Any rspberry pi or alternative SOC can be used. In this project, this was the SOC available. 
+
+The BME280 does com in mayn different flavors, the one used was the cheapest one on amazon. 
+
+![BME280](docs/bme.png)
+
 The projet host a webserver and pushes the data to a Postgres database. You can modify the code
 if you want to use another database on no database at all. The same for the Webserver.
 
