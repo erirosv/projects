@@ -3,8 +3,15 @@
 This is a POC for a creating a simple server and a X amount of clients to connect. The server is hosting a webserver that displays the data from the sensors ower the local area network. The client reads sensor data and transmits it ower the LAN to the server. 
 
 
-## Comming up
-Adding the collected data from the server and push it to a database for long time storage and future work.
+## Content
+Server:
+- server
+- web server
+- database
+
+Client:
+- client
+- sensor
 
 ## Modify
 This part of the server and client most likely needs to be chnaged to make the project work.

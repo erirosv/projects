@@ -1,7 +1,10 @@
 import socket
 import threading
+import os
 from functools import partial  # Import functools.partial
 from web import WebServer
+from database import Database
+from dotenv import load_dotenv
 
 # Constant variables
 PORT = 5050
@@ -36,6 +39,8 @@ def manage_clients(web_server, connection, address):
                 print(f'[{address}]\t {message}')
                 temperature, pressure, humidity = parse_sensor_data(message)
                 web_server.update_data(temperature, pressure, humidity)
+                threading.Thread(target=database.insert_query, args=(temperature, humidity, pressure)).start()
+                print(f'[DATABASE] inserted data to database')
                 connection.send('[SERVER] Message received'.encode(FORMAT))
 
     with clients_lock:
@@ -55,13 +60,17 @@ def init_server(web_server):
         thread = threading.Thread(target=partial_manage_clients, args=(connection, address))
         thread.start()
 
-def web_server():
-    web_server = WebServer(host=SERVER, port=WEB_PORT)
-    web_server.run()
-
 if __name__ == "__main__":
     print(f'[SERVER STATUS]\t\t\t starting...')
+    load_dotenv()
+    database = Database(
+        host=os.getenv('DATABASE_HOST'),
+        name=os.getenv('DATABASE_NAME'),
+        user=os.getenv('DATABASE_USER'),
+        password=os.getenv('DATABASE_PASSWORD')
+    )
     web_server_instance = WebServer(host=SERVER, port=WEB_PORT)
     web_server_thread = threading.Thread(target=web_server_instance.run)
     web_server_thread.start()
     init_server(web_server_instance)
+    database.close()
