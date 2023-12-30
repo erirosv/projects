@@ -1,26 +1,67 @@
-from flask import Flask, request, render_template
+import socket
+import threading
+from functools import partial  # Import functools.partial
+from web import WebServer
 
-app = Flask(__name__)
+# Constant variables
+PORT = 5050
+SERVER = '192.168.50.12'
+ADDRESS = (SERVER, PORT)
+FORMAT = 'utf-8'
+HEADER = 1024
+DISCONNECT = 'Disconnected'
+WEB_PORT = 8080
 
-latest_data = {}
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(ADDRESS)
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    data = request.get_json()
-    print("Received data:", data)
+clients = set()
+clients_lock = threading.Lock()
 
-    # Get a unique identifier for the node, e.g., its IP address
-    node_identifier = request.remote_addr
+def manage_clients(web_server, connection, address):
+    print(f'[CONNECTION]\t\t\t {address}')
+    switch = True
+    with clients_lock:
+        clients.add(connection)
 
-    # Store the latest data for each node
-    latest_data[node_identifier] = data
-    
-    return 'Data received successfully'
+    while switch:
+        message_length = connection.recv(HEADER).decode(FORMAT)
+        if message_length:
+            message_length = int(message_length)
+            message = connection.recv(message_length).decode(FORMAT)
+            if message == DISCONNECT:
+                connection.send('[SERVER] Closing connection...'.encode(FORMAT))
+                switch = False
+            else:
+                print(f'[{address}]\t {message}')
+                temperature, pressure, humidity = parse_sensor_data(message)
+                web_server.update_data(temperature, pressure, humidity)
+                connection.send('[SERVER] Message received'.encode(FORMAT))
 
-@app.route('/')
-def index():
-    # Render the HTML page with the latest data from each node
-    return render_template('index.html', data=latest_data)
+    with clients_lock:
+        clients.remove(connection)
+    connection.close()
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1234)
+def parse_sensor_data(data):
+    temperature, pressure, humidity = data.split(':')
+    return temperature, pressure, humidity
+
+def init_server(web_server):
+    server.listen()
+    print(f'[SERVER IP]\t\t\t {SERVER}')
+    while True:
+        connection, address = server.accept()
+        partial_manage_clients = partial(manage_clients, web_server)
+        thread = threading.Thread(target=partial_manage_clients, args=(connection, address))
+        thread.start()
+
+def web_server():
+    web_server = WebServer(host=SERVER, port=WEB_PORT)
+    web_server.run()
+
+if __name__ == "__main__":
+    print(f'[SERVER STATUS]\t\t\t starting...')
+    web_server_instance = WebServer(host=SERVER, port=WEB_PORT)
+    web_server_thread = threading.Thread(target=web_server_instance.run)
+    web_server_thread.start()
+    init_server(web_server_instance)
