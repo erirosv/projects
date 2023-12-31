@@ -36,3 +36,13 @@ FORMAT = 'utf-8'
 HEADER = 1024
 DISCONNECT = 'Disconnected'
 ```
+
+**Database**
+This is the needed variables for teh postgres DB, they are stored in a .env file for security.
+
+```python
+DATABASE_NAME = ''
+DATABSE_USER = ''
+DATABASE_ADDRESS = ''
+DATABASE_PASSWORD = ''
+```
