@@ -1,7 +1,7 @@
 import socket
 import threading
 import os
-from functools import partial  # Import functools.partial
+from functools import partial
 from web import WebServer
 from database import Database
 from dotenv import load_dotenv
@@ -63,14 +63,18 @@ def init_server(web_server):
 if __name__ == "__main__":
     print(f'[SERVER STATUS]\t\t\t starting...')
     load_dotenv()
+    print(f'[SERVER STATUS]\t\t\t Database connection initializing...')
     database = Database(
         host=os.getenv('DATABASE_HOST'),
         name=os.getenv('DATABASE_NAME'),
         user=os.getenv('DATABASE_USER'),
         password=os.getenv('DATABASE_PASSWORD')
     )
+    print(f'[SERVER STATUS]\t\t\t Database connection accepted')
+    print(f'[SERVER STATUS]\t\t\t Webserver initializing...')
     web_server_instance = WebServer(host=SERVER, port=WEB_PORT)
     web_server_thread = threading.Thread(target=web_server_instance.run)
     web_server_thread.start()
+    print(f'[SERVER STATUS]\t\t\t Webserver {SERVER}:{WEB_PORT}')
     init_server(web_server_instance)
     database.close()

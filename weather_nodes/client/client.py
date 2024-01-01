@@ -5,7 +5,7 @@ import time
 
 # Constant variables
 PORT = 5050
-SERVER = '192.168.50.12' # socket.gethostbyname(socket.gethostname())
+SERVER = '192.168.50.12'  # socket.gethostbyname(socket.gethostname())
 ADDRESS = (SERVER, PORT)
 FORMAT = 'utf-8'
 HEADER = 1024
@@ -26,8 +26,7 @@ def send(msg):
     else:
         print(client.recv(HEADER).decode(FORMAT))
 
-def run():
-    sensor = Sensor()
+def run(sensor):
     switcher = True
     while switcher:
         temperature, pressure, humidity = sensor.read_sensor_data()
@@ -36,7 +35,9 @@ def run():
         time.sleep(10)
 
 if __name__ == '__main__':
-    run()
+    sensor_instance = Sensor()
+
+    run(sensor_instance)
     send('test send ')
     send(DISCONNECT)  # Disconnect from the server
     client.close()
