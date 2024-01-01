@@ -2,6 +2,10 @@
 
 This is a POC for a creating a simple server and a X amount of clients to connect. The server is hosting a webserver that displays the data from the sensors ower the local area network. The client reads sensor data and transmits it ower the LAN to the server. 
 
+## TODO
+- [ ] Restart the database and add all the columns needed
+- [ ] Add the extra columns from database to code
+- [ ] Testing 
 
 ## Content
 Server:
