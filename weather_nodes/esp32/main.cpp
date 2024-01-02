@@ -3,8 +3,8 @@
 #include <Adafruit_BME280.h>
 #include <WiFi.h>
 
-const char* ssid = "ASUS_AP";
-const char* password = "33jonsered";
+const char* ssid = "SSID";
+const char* password = "password";
 const char* serverIP = "192.168.50.12"; 
 const int serverPort = 5050;
 const char* location = "Living Room";  
