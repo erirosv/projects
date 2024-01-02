@@ -4,6 +4,7 @@ import os
 from functools import partial
 from web import WebServer
 from database import Database
+from weather import Weather
 from dotenv import load_dotenv
 
 # Constant variables
@@ -38,6 +39,7 @@ def manage_clients(web_server, connection, address):
             else:
                 print(f'[{address}]\t {message}')
                 temperature, pressure, humidity = parse_sensor_data(message)
+                pressure = Weather.sea_level_pressure(temperature, pressure, humidity)
                 web_server.update_data(temperature, pressure, humidity)
                 threading.Thread(target=database.insert_query, args=(temperature, humidity, pressure)).start()
                 print(f'[DATABASE] inserted data to database')
