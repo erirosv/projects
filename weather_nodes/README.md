@@ -4,6 +4,7 @@ This is a POC for a creating a simple server and a X amount of clients to connec
 
 ## TODO
 - [ ] Restart the database and add all the columns needed
+    - [ ] Simple database model
 - [ ] Add the extra columns from database to code
 - [ ] Testing 
 
