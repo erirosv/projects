@@ -30,4 +30,3 @@ class Database:
         data_to_insert = (today, now, temperature, pressure, humidity)
         cursor.execute(insert_query, data_to_insert)
         self.conn.commit()
-        #self.conn.close()
