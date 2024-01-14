@@ -1,4 +1,5 @@
 from flask import Flask, request
+import uuid
 
 class WebServer:
     def __init__(self, host, port):
@@ -17,11 +18,11 @@ class WebServer:
         @self.app.route('/register', methods=['POST'])
         def register():
             data = request.get_json()
-            if 'id' in data and 'location' in data:
-                client_id = data['id']
+            if 'location' in data:
+                client_id = str(uuid.uuid4())  # Generate a unique identifier
                 location = data['location']
                 self.registered_clients.add((client_id, location))
-                return 'Registration successful'
+                return {'id': client_id, 'message': 'Registration successful'}
             else:
                 return 'Invalid registration data', 400
 
