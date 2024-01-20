@@ -1,0 +1,30 @@
+/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+#header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+#Weather-display {
+    text-align: center;
+    margin-top: 0px;
+}
+
+#Weather-display p {
+    font-size: 24px;
+    color: black;
+    margin: 5px 0;  /* Adjust the margin to bring the paragraphs closer */
+}
+
+#Weather-display h1 {
+    margin-bottom: 5px;  /* Adjust the margin to bring the header and paragraphs closer */
+}

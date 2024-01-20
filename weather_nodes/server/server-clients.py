@@ -5,10 +5,11 @@ import threading
 import os
 import sys
 from functools import partial
-from web import WebServer
+from weather_nodes.server.web1 import WebServer
 from database import Database
 from weather import Weather
 from dotenv import load_dotenv
+import signal
 
 # Constant variables
 PORT = 5050
@@ -18,6 +19,8 @@ FORMAT = 'utf-8'
 HEADER = 1024
 DISCONNECT = 'Disconnected'
 WEB_PORT = 8080
+
+threads_lock = threading.Lock()
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDRESS)
@@ -39,6 +42,8 @@ def manage_clients(web_server, connection, address):
             if message == DISCONNECT:
                 connection.send('[SERVER] Closing connection...'.encode(FORMAT))
                 switch = False
+            elif message.lower() == 'q':
+                message = connection.recv(message_length).decode(FORMAT)
             else:
                 print(f'[{address}]\t {message}')
                 id_name, location, temperature, pressure, humidity = parse_sensor_data(message)
@@ -57,7 +62,10 @@ def parse_sensor_data(data):
     return id_name, location, temperature, pressure, humidity
 
 def init_server(web_server):
+    threads = []
     try:
+        signal.signal(signal.SIGINT, lambda signum, frame: shutdown_server(web_server, threads))
+
         server.listen()
         print(f'[SERVER IP]\t\t\t {SERVER}')
         threads = []
@@ -86,6 +94,19 @@ def init_server(web_server):
     except SystemExit:
         # Catch SystemExit and do nothing to allow a graceful exit
         pass 
+
+def shutdown_server(web_server, threads):
+    with threads_lock:
+        # Access and modify the threads list within the lock
+        for thread in threads:
+            try:
+                thread.join()
+            except KeyboardInterrupt:
+                pass  # Ignore additional KeyboardInterrupt during thread.join()
+
+    # Perform any additional cleanup if needed
+    print("Server and threads successfully stopped.")
+    sys.exit()
 
 if __name__ == "__main__":
     print(f'[SERVER STATUS]\t\t\t starting...')

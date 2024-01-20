@@ -1,0 +1,15 @@
+<!-- templates/register.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Form</title>
+</head>
+<body>
+    <form action="{{ url_for('register') }}" method="post" enctype="application/json">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

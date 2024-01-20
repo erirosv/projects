@@ -12,7 +12,8 @@ class WebServer:
         self.humidity = ''
         self.pressure = ''
         self.location = ''
-        self.node_data = {}  # Updated to store weather data for each node
+        self.node_data = {}
+
 
         # Initialize registered clients from the database
         self.registered_clients = self.database.get_registered_clients()
@@ -65,14 +66,6 @@ class WebServer:
             self.pressure = pressure
             self.humidity = humidity
             self.location = location
-
-            # Update node_data dictionary
-            self.node_data[client_id] = {
-                'location': location,
-                'temperature': temperature,
-                'pressure': pressure,
-                'humidity': humidity
-            }
         else:
             print(f"Unregistered client {client_id} from {location}. Ignoring sensor data.")
 

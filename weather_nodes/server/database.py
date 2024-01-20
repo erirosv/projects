@@ -27,6 +27,7 @@ class Database:
     def init_cursor(self):
         return self.conn.cursor()
 
+    # inserting weather data
     def insert_query(self, client_id, location, temperature, humidity, pressure):
         with self:
             cursor = self.init_cursor()
@@ -40,6 +41,7 @@ class Database:
             cursor.execute(insert_query, data_to_insert)
             self.conn.commit()
 
+    # inserting client data
     def insert_registered_client(self, client_id, location):
         with self:
             cursor = self.init_cursor()

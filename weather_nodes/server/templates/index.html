@@ -1,0 +1,28 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Station</title>
+    <meta http-equiv="refresh" content="10">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+    <div id="header">
+        <h1>
+            Temperature data
+        </h1>
+    </div>
+    <div id="Weather-display">
+        <p>Location: {{ location }}</p>
+        <p>Temperature: {{ temperature }}&deg;C, Pressure: {{ pressure }} hPa, Humidity: {{ humidity }}%</p>
+
+        {% for client_id, data in node_data.items() %}
+            <p>Node: {{ client_id }}</p>
+            <p>Location: {{ data['location'] }}</p>
+            <p>Temperature: {{ data['temperature'] }}&deg;C, Pressure: {{ data['pressure'] }} hPa, Humidity: {{ data['humidity'] }}%</p>
+            <hr>
+        {% endfor %}
+    </div>
+</body>
+</html>
