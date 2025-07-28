@@ -1,5 +1,6 @@
 # Setting up an VPN for a home lab
 
+This i a simple way of how I set up my own VPN to my home network and lab. The VPN used is wireguard and a UI ontop of it is Netmaker Web UI. FOr handeling the dynamicly IP from the ISP (if not paying for a static IP), DUckDNS will be used for handeling this.
 
 # Netmaker on Raspberry Pi — Full Setup Guide
 
